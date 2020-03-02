@@ -6,9 +6,9 @@ var Task = function (task) {
 
 Task.getLogin = function getLogin(data) {
     return new Promise(function (resolve, reject) {
-        var str = "SELECT * FROM tb_user "
-            + " WHERE user_username = " + sql.escape(data.user_username)
-            + " AND user_password = " + sql.escape(data.user_password);
+        var str = "SELECT * FROM tb_employee "
+            + " WHERE employee_username = " + sql.escape(data.employee_username)
+            + " AND employee_password = " + sql.escape(data.employee_password);
 
         sql.query(str, function (err, res) {
             if (err) {
@@ -29,9 +29,9 @@ Task.getLogin = function getLogin(data) {
         });
     });
 }
-Task.getUserBy = function getUserBy() {
+Task.getEmployeeBy = function getEmployeeBy() {
     return new Promise(function (resolve, reject) {
-        var str = "SELECT * FROM tb_user";
+        var str = "SELECT * FROM tb_employee";
 
         sql.query(str, function (err, res) {
             if (err) {
@@ -52,9 +52,9 @@ Task.getUserBy = function getUserBy() {
         });
     });
 }
-Task.getUserByUserCode = function getUserByUserCode(data) {
+Task.getEmployeeByEmployeeCode = function getEmployeeByEmployeeCode(data) {
     return new Promise(function (resolve, reject) {
-        var str = "SELECT * FROM tb_user WHERE user_code = '" + data.user_code + "' ";
+        var str = "SELECT * FROM tb_employee WHERE employee_id = '" + data.employee_id + "' ";
 
         sql.query(str, function (err, res) {
             if (err) {
@@ -75,18 +75,17 @@ Task.getUserByUserCode = function getUserByUserCode(data) {
         });
     });
 }
-Task.insertUser = function insertUser(data, last_code) {
+Task.insertEmployee = function insertEmployee(data, last_code) {
     return new Promise(function (resolve, reject) {
-        var str = "INSERT INTO tb_user (user_code, user_username, user_password, user_name, user_lastname, user_address, user_tel, user_email, user_image)"
+        var str = "INSERT INTO tb_employee (employee_id, department_id, employee_name, employee_lastname, employee_email, employee_tel, employee_username, employee_password)"
             + " VALUES ('" + last_code + "', "
-            + " '" + data.user_username + "', "
-            + " '" + data.user_password + "', "
-            + " '" + data.user_name + "', "
-            + " '" + data.user_lastname + "', "
-            + " '" + data.user_address + "', "
-            + " '" + data.user_tel + "', "
-            + " '" + data.user_email + "', "
-            + " '" + data.user_image + "') ";
+            + " '" + data.department_id + "', "
+            + " '" + data.employee_name + "', "
+            + " '" + data.employee_lastname + "', "
+            + " '" + data.employee_email + "', "
+            + " '" + data.employee_tel + "', "
+            + " '" + data.employee_username + "', "
+            + " '" + data.employee_password + "') ";
 
         sql.query(str, function (err, res) {
             if (err) {
@@ -107,43 +106,16 @@ Task.insertUser = function insertUser(data, last_code) {
         });
     });
 }
-Task.updateUserByUserCode = function updateUserByUserCode(data) {
+Task.updateEmployeeByEmployeeCode = function updateEmployeeByEmployeeCode(data) {
     return new Promise(function (resolve, reject) {
-        var str = " UPDATE tb_user "
-            + " SET user_username = '" + data.user_username + "',"
-            + " user_password = '" + data.user_password + "',"
-            + " user_name = '" + data.user_name + "',"
-            + " user_lastname = '" + data.user_lastname + "',"
-            + " user_address = '" + data.user_address + "',"
-            + " user_tel = '" + data.user_tel + "',"
-            + " user_email = '" + data.user_email + "',"
-            + " user_image = '" + data.user_image + "'"
-            + " WHERE user_code = '" + data.user_code + "'";
-
-        sql.query(str, function (err, res) {
-            if (err) {
-                const require = {
-                    data: [],
-                    error: err,
-                    query_result: false,
-                };
-                resolve(require);
-            } else {
-                const require = {
-                    data: res,
-                    error: [],
-                    query_result: true,
-                };
-                resolve(require);
-            }
-        });
-    });
-}
-Task.updateImageNameByUserCode = function updateImageNameByUserCode(data) {
-    return new Promise(function (resolve, reject) {
-        var str = " UPDATE tb_user "
-            + " SET  user_image = '" + data.user_image + "'"
-            + " WHERE user_code = '" + data.user_code + "'";
+        var str = " UPDATE tb_employee "
+            + " SET employee_name = '" + data.employee_name + "',"
+            + " employee_lastname = '" + data.employee_lastname + "',"
+            + " employee_email = '" + data.employee_email + "',"
+            + " employee_tel = '" + data.employee_tel + "',"
+            + " employee_username = '" + data.employee_username + "',"
+            + " employee_password = '" + data.employee_password + "'"
+            + " WHERE employee_id = '" + data.employee_id + "'";
 
         sql.query(str, function (err, res) {
             if (err) {
@@ -165,9 +137,10 @@ Task.updateImageNameByUserCode = function updateImageNameByUserCode(data) {
     });
 }
 
-Task.deleteUserByUserCode = function deleteUserByUserCode(data) {
+
+Task.deleteEmployeeByEmployeeCode = function deleteEmployeeByEmployeeCode(data) {
     return new Promise(function (resolve, reject) {
-        var str = "DELETE FROM tb_user WHERE user_code = '" + data.user_code + "' ";
+        var str = "DELETE FROM tb_employee WHERE employee_id = '" + data.employee_id + "' ";
 
         sql.query(str, function (err, res) {
             if (err) {
@@ -190,7 +163,7 @@ Task.deleteUserByUserCode = function deleteUserByUserCode(data) {
 }
 Task.getLastCode = function getLastCode() {
     return new Promise(function (resolve, reject) {
-        var str = "SELECT IFNULL(CONCAT('U',LPAD( SUBSTRING(max(user_code), 2, 5)+1,4,'0')), 'U0001') AS last_code  FROM tb_user ";
+        var str = "SELECT IFNULL(CONCAT('E',LPAD( SUBSTRING(max(employee_id), 2, 5)+1,4,'0')), 'E0001') AS last_code  FROM tb_employee ";
 
         sql.query(str, function (err, res) {
             if (err) {

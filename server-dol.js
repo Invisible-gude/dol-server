@@ -29,5 +29,12 @@ app.listen(port, () => {
     console.log('API Start server at port ' + port + '.');
 })
 
-var appRouteUser = require('./routes/appRouteUser');
-appRouteUser(app);
+var appRouteEmployee = require('./routes/appRouteEmployee');
+var appRouteDepartment = require('./routes/appRouteDepartment');
+var appRouteService = require('./routes/appRouteService');
+var appRouteService_Type = require('./routes/appRouteService_Type');
+
+appRouteEmployee(app);
+appRouteDepartment(app);
+appRouteService(app);
+appRouteService_Type(app);
